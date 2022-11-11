@@ -4,7 +4,7 @@
 #include "../include/Building.h"
 
 Building::Building() {
-    // 逐一生成编号为 1 - evtNums 的所有电梯
+    // 逐一生成编号为 0 - evtNums - 1 的所有电梯
     for (int index = 0; index < evtNums; index++) {
         auto elevator = new Elevator(index + 1);
         Elevators.push_back(elevator);
@@ -55,7 +55,7 @@ void Building::b_simulation() {
         PassengerState psgstate = passenger->getState();    //获取到乘客的状态
         int stayingTime = passenger->getStayingTime();    // 获取乘客的停留时间
         int evtID = passenger->getEvtID();  //获取乘客希望乘坐的电梯的ID
-        int evtCurrFloor = Elevators[evtID - 1]->getCurrFloor();  // 获取到电梯的当前楼层
+        int evtCurrFloor = Elevators[evtID-1]->getCurrFloor();  // 获取到电梯的当前楼层
         int psgCurrFloor = passenger->getcurrFloor();   //获取乘客的当前楼层
         // 乘客已经结束停留
         if (psgstate == StayForRandomTime && stayingTime == 0) {
@@ -105,17 +105,22 @@ bool Building::allocateEvtForPsg(Passenger *passenger) {
 
 
 // 判断电梯是否满足
+// 上机要求三：不同的电梯所能到达的楼层不同
 bool Building::isSatisfied(Elevator *elevator, Passenger *passenger) {
+    int evtID = elevator->getID();  //  电梯的ID
     int evtFloor = elevator->getCurrFloor();    // 电梯的楼层
     int psgFloor = passenger->getcurrFloor();   // 乘客的楼层
     int evtDestination = elevator->getDestination();    //电梯的目的地
     int psgDestiantion = passenger->getDestination();   // 乘客的目的地
-    if (evtFloor <= psgFloor && evtDestination >= psgDestiantion)
-        return true;
-    if (evtFloor >= psgFloor && evtDestination <= psgDestiantion)
-        return true;
-    if (elevator->getstate() == Stop)
-        return true;
+    // 如果乘客的目的地电梯能够到达
+    if (Elevator::arrivedTable[evtID-1][psgDestiantion-1] == true) {
+        if (evtFloor <= psgFloor && evtDestination >= psgDestiantion)
+            return true;
+        if (evtFloor >= psgFloor && evtDestination <= psgDestiantion)
+            return true;
+        if (elevator->getstate() == Stop)
+            return true;
+    }
     return false;
 }
 

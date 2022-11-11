@@ -1,8 +1,71 @@
 #include "../include/Elevator.h"
 
+int Elevator::gapTime = maxGapTime;
+
+bool Elevator::arrivedTable[10][40] = {
+        {
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,},
+        {
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            },
+        {
+                true,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+            },
+        {
+                true,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+            },
+        {
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+            },
+        {
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+            },
+        {
+                true,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+            },
+        {
+                true,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+            },
+        {
+                true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,false,
+            },
+        {
+                true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,false,
+            },
+};
 
 Elevator::Elevator(int _id) : id(_id), currFloor(1), direction(DirectionStay), state(Stop),
-                              passTime(0), destination(1), gapTime(4) {
+                              passTime(0), destination(1){
     // 一楼对电梯有请求
     requests.push_back(1);
 }
