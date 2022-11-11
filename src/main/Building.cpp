@@ -62,13 +62,13 @@ void Building::b_simulation() {
             if (allocateEvtForPsg(passenger))  // 为乘客分配合适的电梯，如果成功分配，则重新设置乘客的状态
                 passenger->setState(WaitForElevatorArrive); // 重新设置乘客的状态
         }
-            // 如果乘客的电梯已经到达，将乘客加入电梯内
+        // 如果乘客的电梯已经到达，将乘客加入电梯内
         else if (psgstate == WaitForElevatorArrive && evtCurrFloor == psgCurrFloor) {
             passenger->setState(RunWithElevator);   // 重新设置乘客的状态
             Elevators[evtID - 1]->addPsg(passenger);  // 将乘客加入到电梯中
         }
 
-            // 如果乘客的状态为已经结束模拟
+        // 如果乘客的状态为已经结束模拟
         else if (psgstate == AfterSimulation) {
             Passengers.erase(iterator); // 将乘客从中删除
             delete passenger;   //  释放乘客的内存

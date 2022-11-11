@@ -44,3 +44,5 @@
 14	637	6890790672580289	CMakeFiles/Elevator.dir/src/main/Elevator.cpp.obj	ebd91fc7b5092a2b
 24	1415	6890790680370283	CMakeFiles/Elevator.dir/src/main/Simulation.cpp.obj	80ba85323177133a
 1415	1637	6890790682560876	Elevator.exe	2b2543b6eccc8843
+4	968	6891001756375323	CMakeFiles/Elevator.dir/src/main/Building.cpp.obj	2424678c61dfd673
+969	1811	6891001764781371	Elevator.exe	2b2543b6eccc8843
