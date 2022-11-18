@@ -3,18 +3,15 @@
 
 using std::string;
 using std::vector;
-
-//using std::priority_queue;
 class Elevator {
 private:
-//    static vector<Floor*> floors;
+    int stopTime;   // 电梯在模拟过程中的总停留时间
+    int runTime;    // 电梯在模拟过程中的总运行时间
     static int gapTime;
     ElevatorState state;    // 电梯的状态
     Direction direction;    // 电梯的方向
     int passTime;   // 电梯在两层之间已经运行的时间
-//    int gapTime;    // 电梯在两层之间的运行时间
     int currFloor;          // 电梯当前的楼层
-//    int passengerNums;      // 电梯中的乘客数量
     int id;                 // 电梯的编号
     int destination;    // 电梯的目的地
     vector<Passenger*> passengers;  // 电梯中的乘客数量
@@ -53,8 +50,12 @@ public:
 
     bool isDestination();
 
-    int getPsgNums();
-
     vector<Passenger *> getPassengers();
+
+    int getRunningTime() const;
+
+    int getStoppingTime() const;
+
+    int distance(Passenger *pPassenger);
 };
 

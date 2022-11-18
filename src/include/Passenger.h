@@ -7,7 +7,8 @@ using std::cin;
 using std::endl;
 class Passenger {
 private:
-//    static vector<Elevator*> elevators; //乘客能够了解到所有电梯的信息
+    int waitTime;   // 乘客发起请求后等待电梯的时间
+
     int destination;    // 乘客的目的楼层
 
     int currFloor;     // 乘客的当前所在的楼层
@@ -60,6 +61,8 @@ public:
     int getCurrSmuTimes();
 
     int getMaxSmuTimes();
+
+    int getWaitingTime() const;
 };
 
 

@@ -1,10 +1,11 @@
 //
 // Created by Napleon on 2022-10-18.
 //
-
+#pragma once
 #ifndef ELEVATOR_BUILDING_H
 #define ELEVATOR_BUILDING_H
 #include<Elevator.h>
+#include<algorithm>
 class Building {
 private:
     int psgNums;    //模拟过程中生成的总乘客数量
@@ -15,19 +16,21 @@ public:
     Building();
     ~Building();
     int genePsgs();
-    int getPsgs();
+    vector<Passenger*> getPsgs() const;
 
     void showData();
 
     bool allocateEvtForPsg(Passenger *passenger);
 
-    bool isSatisfied(Elevator *elevator, Passenger *passenger);
+    static bool isSatisfied(Elevator *elevator, Passenger *passenger);
 
     int getPsgNums();
 
-    void printState(ElevatorState state);
+    static void printState(ElevatorState state);
 
-    void printPassengers(Elevator* elevator);
+    static void printPassengers(Elevator* elevator);
+
+    void showStatistics() const ;
 };
 
 #endif
