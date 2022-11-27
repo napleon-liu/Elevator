@@ -124,9 +124,6 @@ void Elevator::goUpSimulation() {
     if (this->passengers.size() == 0 && this->requests.size() == 0) {
         state = Stop;
     }
-    if (currFloor == 40 && state == GoUp) {
-        state = GoDown;
-    }
     // 如果电梯在两层之间已经运行的时间小于需要的时间
     if (passTime < gapTime) {
         passTime++; //继续运行
@@ -142,15 +139,15 @@ void Elevator::goUpSimulation() {
     for (auto passenger: passengers) {
         passenger->setCurrFloor(currFloor);
     }
+    if (currFloor == 40 && state == GoUp) {
+        state = GoDown;
+    }
 }
 
 void Elevator::goDownSimulation() {
     runTime++;
     if (this->passengers.size() == 0 && this->requests.size() == 0) {
         state = Stop;
-    }
-    if (currFloor == 1 && state == GoDown) {
-        state = GoUp;
     }
 //    if (currFloor <= 0) {
 //        state = Stop;
@@ -172,6 +169,9 @@ void Elevator::goDownSimulation() {
     // 更新所有乘客的当前所在楼层信息
     for (auto passenger: passengers) {
         passenger->setCurrFloor(currFloor);
+    }
+    if (currFloor == 1 && state == GoDown) {
+        state = GoUp;
     }
 }
 

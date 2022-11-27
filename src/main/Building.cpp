@@ -51,7 +51,7 @@ void Building::b_simulation() {
         int psgCurrFloor = passenger->getcurrFloor();   //获取乘客的当前楼层
         // 乘客已经结束停留
         if (psgstate == StayForRandomTime && stayingTime == 0) {
-            if (allocateEvtForPsg(passenger))  // 为乘客分配合适的电梯，如果成功分配，则重新设置乘客的状态
+            if (allocateElevatorForPassenger(passenger))  // 为乘客分配合适的电梯，如果成功分配，则重新设置乘客的状态
                 passenger->setState(WaitForElevatorArrive); // 重新设置乘客的状态
         }
         // 如果乘客的电梯已经到达，将乘客加入电梯内
@@ -71,7 +71,7 @@ void Building::b_simulation() {
 }
 
 // 为乘客分配合适的电梯， 并向电梯发送请求
-bool Building::allocateEvtForPsg(Passenger *passenger) {
+bool Building::allocateElevatorForPassenger(Passenger *passenger) {
     //  遍历10部电梯，寻找适合的电梯
     /*
     * 有三种情况的电梯符合要求:
@@ -121,14 +121,14 @@ bool Building::isSatisfied(Elevator *elevator, Passenger *passenger) {
     return false;
 }
 
-int Building::getPsgNums() {
+int Building::getPassengerNums() {
     return std::count_if(Passengers.begin(), Passengers.end(), [](Passenger* p){return p->getState() != AfterSimulation;});
 }
 
 
 void Building::showData() {
     cout << "/*************************ElevatorSimulation*************************/" << endl;
-    cout << "passenger numbers in simulation: " << this->getPsgNums() << endl;
+    cout << "passenger numbers in simulation: " << this->getPassengerNums() << endl;
     cout << "Elevator ID\t" << "Elevator state" << "\t" << "passengers" << "\t" << "current floor number"
          << endl;
     for (auto elevator: Elevators) {
