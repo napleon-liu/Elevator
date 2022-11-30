@@ -8,10 +8,10 @@
 #include<algorithm>
 class Building {
 private:
-//    int psgNums;    //模拟过程中生成的总乘客数量
+    int psgNums;    //模拟过程中生成的总乘客数量
     vector<Elevator*> Elevators;
     vector<Passenger*> Passengers;
-    vector<int> runningElevators;   // 记录每一时间下正在运行的电梯数目
+    vector<unsigned short> runningElevators;   // 记录每一时间下正在运行的电梯数目
 public:
     Building();
 
@@ -34,6 +34,8 @@ public:
     static void printPassengers(Elevator* elevator);
 
     void showStatistics() const;
+
+    vector<unsigned short > getStatistics();
 
     vector<Passenger*> getPsgs() const;
 };

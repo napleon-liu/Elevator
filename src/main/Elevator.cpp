@@ -287,3 +287,7 @@ int Elevator::distance(Passenger *pPassenger) {
     return abs(currFloor - pPassenger->getcurrFloor());
 }
 
+ElevatorState Elevator::getState() const {
+    return this->state;
+}
+

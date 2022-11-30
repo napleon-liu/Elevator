@@ -1,6 +1,5 @@
 #pragma once
 #include "Passenger.h"
-
 using std::string;
 using std::vector;
 class Elevator {
@@ -19,6 +18,8 @@ private:
 public:
 
     static bool arrivedTable[10][40];    // 电梯的可达表
+
+    ElevatorState getState() const;
 
     Elevator(int _id);                     // 电梯的构造函数
 

@@ -1,4 +1,15 @@
 #include "../include/Passenger.h"
+Timer* Passenger::timer = Timer::getInstance();
+
+vector<std::pair<int, int>> Passenger::busytime = {
+        {277, 297},
+        {301, 325},
+        {493, 517},
+        {577, 613},
+        {712, 745},
+        {853, 889},
+        {993, 955},
+};
 
 // 所有乘客初始时均在一层
 Passenger::Passenger(int _id) : currFloor(1), currSmuTimes(0), state(BeforeSimulation), id(_id), waitTime(0) {
@@ -56,6 +67,10 @@ void Passenger::p_Simulation() {
 // 乘客在某层停留时的模拟
 void Passenger::staySimulation() {
     // 如果结束了停留，则将状态改变为等待电梯，并为乘客重新分配目的地
+    int endTime = timer->getTime() + stayingTime;
+    if (inBusyTime(endTime)) {
+        stayingTime += 20;
+    }
     if (stayingTime > 0) {
         stayingTime--;
     }
@@ -121,4 +136,13 @@ int Passenger::getMaxSmuTimes() {
 
 int Passenger::getWaitingTime() const {
     return waitTime;
+}
+
+bool Passenger::inBusyTime(int time) {
+    for (auto& pair : Passenger::busytime) {
+        if (pair.first <= time && pair.second >= time) {
+            return true;
+        }
+    }
+    return false;
 }

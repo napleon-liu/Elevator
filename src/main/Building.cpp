@@ -9,7 +9,7 @@ Building::Building() {
         auto elevator = new Elevator(index + 1);
         Elevators.push_back(elevator);
     }
-    psgNums = genePsgs(); // 生成乘客
+    int psgNums = genePsgs(); // 生成乘客
 }
 
 // 建筑的析构函数，释放构造函数中分配的内存
@@ -68,6 +68,9 @@ void Building::b_simulation() {
     }
     // 展示模拟信息面板
     showData();
+    // 统计正在运行的电梯数目;
+    unsigned short amount = std::count_if(Elevators.begin(), Elevators.end(),[](const Elevator* elevator){return elevator->getState() != Stop;});
+    runningElevators.push_back(amount);
 }
 
 // 为乘客分配合适的电梯， 并向电梯发送请求
@@ -188,4 +191,8 @@ void Building::showStatistics() const {
     }
     cout << "/*************************Passengers Statistics*************************/" << endl;
 
+}
+
+vector<unsigned short> Building::getStatistics() {
+    return runningElevators;
 }
