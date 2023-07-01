@@ -2,40 +2,165 @@
 // Created by Napleon on 2022-10-18.
 //
 #include "../include/Building.h"
-Building::Building(int evtNums, int maxPsgNums, int floorNums) {
-   this->evtCtrl = new EvtCtrl(evtNums);
-   this->psgs =  genePsgs(evtCtrl, evtNums, maxPsgNums, floorNums);
-}
 
-
-Building::~Building() {
-    delete this->evtCtrl;
-    delete this->psgs;
-}
-
-vector<Passenger*>* Building::genePsgs(EvtCtrl* evtCtrl, int evtNums, int maxPsgNums, int floorNums) {
-    int psgNums = rand() % maxPsgNums;
-    auto* psgs = new vector<Passenger*>(psgNums);
-    cout << "Generate" << " " << psgNums << " passengers successfully" << endl;
-    for (int i = 0; i < psgNums; i++) {
-        auto* passenger = new Passenger(evtNums, floorNums, i + 1);
-        // relate psg and his evt
-        int evtID = passenger->getEvtID();
-        for (Elevator* evt : *this->evtCtrl->getEvts()) {
-            int id = evt->getID();
-            if (id == evtID) {
-                evt->setReq(1);
-            }
-        }
-        psgs->at(i) = passenger;
+Building::Building() {
+    // 逐一生成编号为 1 - evtNums 的所有电梯
+    for (int index = 0; index < evtNums; index++) {
+        auto elevator = new Elevator(index + 1);
+        Elevators.push_back(elevator);
     }
-    return psgs;
+    psgNums = genePsgs(); // 生成乘客
+    // 逐一生成编号为 1 - floorNums 的所有楼层
+//   for (int index = 0; index < floorNums; index++) {
+//       auto* floor = new Floor(index + 1);
+//       BdFloors.push_back(floor);
+//   }
 }
 
-EvtCtrl* Building::getEvtCtrl() {
-    return this->evtCtrl;
+// 建筑的析构函数，释放构造函数中分配的内存
+Building::~Building() {
+    while (!Elevators.empty()) {
+        delete *Elevators.begin();
+    }
+//    while (!BdFloors.empty()) {
+//        delete *BdFloors.begin();
+//    }
 }
 
-vector<Passenger*>* Building::getPsgs() {
-    return this->psgs;
+// 生成一定数目的乘客
+// 当前情况为： 乘客一次性到达建筑的第一层，并为其分配电梯
+int Building::genePsgs() {
+    // 生成随机数目的乘客
+    int psgNums = rand() % maxPsgNums + 1;
+    cout << "generate " << " " << psgNums << " passengers successfully" << endl;
+    // 生成编号为 1 - maxPsgNums 的乘客
+    for (int i = 0; i < psgNums; i++) {
+        auto *passenger = new Passenger(i + 1);
+        Passengers.push_back(passenger);
+    }
+    return psgNums;
+}
+
+
+// 建筑的模拟过程
+void Building::b_simulation() {
+    // 对所有elevator都模拟
+    for (auto elevator: Elevators) {
+        elevator->e_Simulation();   // 更新所有电梯的状态
+    }
+    // 对所有的乘客进行模拟
+    for (auto iterator = Passengers.begin(); iterator != Passengers.end(); iterator++) {
+        Passenger *passenger = *iterator;
+        passenger->p_Simulation();  // 更新乘客的状态
+        PassengerState psgstate = passenger->getState();    //获取到乘客的状态
+        int stayingTime = passenger->getStayingTime();    // 获取乘客的停留时间
+        int evtID = passenger->getEvtID();  //获取乘客希望乘坐的电梯的ID
+        int evtCurrFloor = Elevators[evtID - 1]->getCurrFloor();  // 获取到电梯的当前楼层
+        int psgCurrFloor = passenger->getcurrFloor();   //获取乘客的当前楼层
+        // 乘客已经结束停留
+        if (psgstate == StayForRandomTime && stayingTime == 0) {
+            if (allocateEvtForPsg(passenger))  // 为乘客分配合适的电梯，如果成功分配，则重新设置乘客的状态
+                passenger->setState(WaitForElevatorArrive); // 重新设置乘客的状态
+        }
+        // 如果乘客的电梯已经到达，将乘客加入电梯内
+        else if (psgstate == WaitForElevatorArrive && evtCurrFloor == psgCurrFloor) {
+            passenger->setState(RunWithElevator);   // 重新设置乘客的状态
+            Elevators[evtID - 1]->addPsg(passenger);  // 将乘客加入到电梯中
+        }
+
+        // 如果乘客的状态为已经结束模拟
+        else if (psgstate == AfterSimulation) {
+            Passengers.erase(iterator); // 将乘客从中删除
+            delete passenger;   //  释放乘客的内存
+            iterator--;
+        }
+//        int evtID = passenger->getEvtID();
+//        Elevator* elevator = Elevators[evtID-1];    // 获取到该电梯
+//        if ()
+    }
+    // 展示模拟信息面板
+    showData();
+}
+
+// 为乘客分配合适的电梯， 并向电梯发送请求
+bool Building::allocateEvtForPsg(Passenger *passenger) {
+    //  遍历10部电梯，寻找适合的电梯
+    /*
+    * 有三种情况的电梯符合要求:
+    * 1. 电梯的当前位置低于本楼层，电梯的目的地高于本楼层
+    * 2. 电梯的当前位置高于本楼层，电梯的目的地低于本楼层
+    * 3. 电梯为停止状态
+    */
+    for (Elevator *elevator: Elevators) {
+        // 如果存在合适的电梯，则将该电梯的ID传给乘客
+        if (isSatisfied(elevator, passenger)) {
+            passenger->setElevator(elevator->getID());
+            int floorNumber = passenger->getcurrFloor();
+            elevator->setRequest(floorNumber);   // 向指定的电梯发出请求
+            return true;
+        }
+    }
+    return false;
+}
+
+
+// 判断电梯是否满足
+bool Building::isSatisfied(Elevator *elevator, Passenger *passenger) {
+    int evtFloor = elevator->getCurrFloor();    // 电梯的楼层
+    int psgFloor = passenger->getcurrFloor();   // 乘客的楼层
+    int evtDestination = elevator->getDestination();    //电梯的目的地
+    int psgDestiantion = passenger->getDestination();   // 乘客的目的地
+    if (evtFloor <= psgFloor && evtDestination >= psgDestiantion)
+        return true;
+    if (evtFloor >= psgFloor && evtDestination <= psgDestiantion)
+        return true;
+    if (elevator->getstate() == Stop)
+        return true;
+    return false;
+}
+
+int Building::getPsgNums() {
+    return Passengers.size();
+}
+
+
+void Building::showData() {
+    cout << "/*************************ElevatorSimulation*************************/" << endl;
+    cout << "passenger numbers in simulation: " << Passengers.size() << endl;
+    cout << "Elevator ID\t" << "Elevator state" << "\t" << "passengers" << "\t" << "current floor number"
+         << endl;
+    for (auto elevator: Elevators) {
+        ElevatorState state = elevator->getstate();
+        cout << elevator->getID() << "\t\t\t";
+        printState(state);
+        cout << "\t\t" ;
+        printPassengers(elevator);
+        cout << "\t\t\t"
+             << elevator->getCurrFloor() << endl;
+
+        cout << "-------------------------------------------------------------------" << endl;
+    }
+
+    cout << "/*************************ElevatorSimulation*************************/" << endl;
+}
+
+void Building::printState(ElevatorState state) {
+    switch (state) {
+        case GoUp:  cout << "GoUp";
+            break;
+        case GoDown: cout << "GoDown";
+            break;
+        case Stay: cout << "Stay";
+            break;
+        case Stop: cout << "Stop";
+            break;
+        default: cout << "Other State";
+            break;
+    }
+}
+
+void Building::printPassengers(Elevator* elevator) {
+    for (auto passenger : elevator->getPassengers()) {
+        cout << passenger->getID() << ' ';
+    }
 }

@@ -3,19 +3,31 @@
 //
 
 #ifndef ELEVATOR_BUILDING_H
-#include "EvtCtrl.h"
 #define ELEVATOR_BUILDING_H
-
+#include "Elevator.h"
 class Building {
 private:
-    EvtCtrl* evtCtrl;
-    vector<Passenger*>* psgs;
+    int psgNums;    //模拟过程中生成的总乘客数量
+    vector<Elevator*> Elevators;
+    vector<Passenger*> Passengers;
 public:
-    Building(int evtNums, int maxPsgNums, int floorNums);
+    void b_simulation();
+    Building();
     ~Building();
-    vector<Passenger*>* genePsgs(EvtCtrl* evtCtrl, int evtNums, int maxPsgNums, int floorNums);
-    EvtCtrl* getEvtCtrl();
-    vector<Passenger*>* getPsgs();
+    int genePsgs();
+    int getPsgs();
+
+    void showData();
+
+    bool allocateEvtForPsg(Passenger *passenger);
+
+    bool isSatisfied(Elevator *elevator, Passenger *passenger);
+
+    int getPsgNums();
+
+    void printState(ElevatorState state);
+
+    void printPassengers(Elevator* elevator);
 };
 
-#endif //ELEVATOR_BUILDING_H
+#endif

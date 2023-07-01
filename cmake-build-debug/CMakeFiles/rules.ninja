@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = "D:\CLion 2022.1.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -SE:\CodeField\CppDocuments\OOP\Elevator -BE:\CodeField\CppDocuments\OOP\Elevator\cmake-build-debug
+  command = "D:\CLion 2022.1.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -SE:\CodeField\Elevator -BE:\CodeField\Elevator\cmake-build-debug
   description = Re-running CMake...
   generator = 1
 

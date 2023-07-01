@@ -1,15 +1,8 @@
 # ninja log v5
-13	693	7036826572928597	CMakeFiles/Elevator.dir/src/main/Building.cpp.obj	533c1cdf0e81b870
-23	1714	7036826583156516	CMakeFiles/Elevator.dir/src/main/ElevatorService.cpp.obj	8e734a71aa276f3e
-57	871	7036824856558309	CMakeFiles/Elevator.dir/src/main/Passenger.cpp.obj	218f9bf54b05df9
-4	747	7036826573477130	CMakeFiles/Elevator.dir/src/main/Elevator.cpp.obj	d4d39b1067c464ab
-33	697	7036826572968494	CMakeFiles/Elevator.dir/src/main/EvtCtrl.cpp.obj	7aad4c16305ffbdc
-1714	1957	7036826585580035	Elevator.exe	d5220aad9781fd8e
-65	1115	7061635403494213	CMakeFiles/Elevator.dir/src/main/Passenger.cpp.obj	2aae52d2a4f242df
-20	1139	7061635403744208	CMakeFiles/Elevator.dir/src/main/Building.cpp.obj	cc94096c92eef275
-35	1223	7061635404584256	CMakeFiles/Elevator.dir/src/main/EvtCtrl.cpp.obj	eeea3c02d4bd5292
-7	1229	7061635404644219	CMakeFiles/Elevator.dir/src/main/Elevator.cpp.obj	3a8e941ab4e1db48
-51	2522	7061635417614202	CMakeFiles/Elevator.dir/src/main/ElevatorService.cpp.obj	365dd636ce6f5d24
-2523	2810	7061635420474215	Elevator.exe	d5220aad9781fd8e
-10	2046	7061868609236283	CMakeFiles/Elevator.dir/src/main/ElevatorService.cpp.obj	365dd636ce6f5d24
-2047	2363	7061868612376218	Elevator.exe	d5220aad9781fd8e
+81	258	6890573708545420	CMakeFiles/Elevator.dir/src/main/Floor.cpp.obj	7933799226088535
+4	968	6891001756375323	CMakeFiles/Elevator.dir/src/main/Building.cpp.obj	2424678c61dfd673
+62	730	6890573713348244	CMakeFiles/Elevator.dir/src/main/Timer.cpp.obj	9144bd5e3fb53e5c
+26	610	6890768539220855	CMakeFiles/Elevator.dir/src/main/Passenger.cpp.obj	345c33f34b7374bd
+969	1811	6891001764781371	Elevator.exe	2b2543b6eccc8843
+14	637	6890790672580289	CMakeFiles/Elevator.dir/src/main/Elevator.cpp.obj	ebd91fc7b5092a2b
+24	1415	6890790680370283	CMakeFiles/Elevator.dir/src/main/Simulation.cpp.obj	80ba85323177133a
