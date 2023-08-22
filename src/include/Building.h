@@ -11,26 +11,33 @@ private:
     int psgNums;    //模拟过程中生成的总乘客数量
     vector<Elevator*> Elevators;
     vector<Passenger*> Passengers;
+    vector<unsigned short> runningElevators;   // 记录每一时间下正在运行的电梯数目
 public:
-    void b_simulation();
     Building();
+
     ~Building();
+
+    void b_simulation();
+
     int genePsgs();
-    vector<Passenger*> getPsgs() const;
 
     void showData();
 
-    bool allocateEvtForPsg(Passenger *passenger);
+    bool allocateElevatorForPassenger(Passenger *passenger);
+
+    int getPassengerNums();
 
     static bool isSatisfied(Elevator *elevator, Passenger *passenger);
-
-    int getPsgNums();
 
     static void printState(ElevatorState state);
 
     static void printPassengers(Elevator* elevator);
 
-    void showStatistics() const ;
+    void showStatistics() const;
+
+    vector<unsigned short > getStatistics();
+
+    vector<Passenger*> getPsgs() const;
 };
 
 #endif

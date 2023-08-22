@@ -1,12 +1,19 @@
 #pragma once
+#include<vector>
+#include "Timer.h"
 #include<random>
 #include<iostream>
 #include "ConstValues.h"
+using namespace std;
 using std::cout;
 using std::cin;
 using std::endl;
 class Passenger {
 private:
+
+    static vector<std::pair<int, int>> busytime;    // 电梯运行的高峰期
+
+    static Timer* timer;
     int waitTime;   // 乘客发起请求后等待电梯的时间
 
     int destination;    // 乘客的目的楼层
@@ -63,6 +70,8 @@ public:
     int getMaxSmuTimes();
 
     int getWaitingTime() const;
+
+    bool inBusyTime(int time);
 };
 
 
