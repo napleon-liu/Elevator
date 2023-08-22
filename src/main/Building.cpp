@@ -62,13 +62,9 @@ void Building::b_simulation() {
 
         // 如果乘客的状态为已经结束模拟
         else if (psgstate == AfterSimulation) {
-            Passengers.erase(iterator); // 将乘客从中删除
-            delete passenger;   //  释放乘客的内存
-            iterator--;
+            ;
         }
-//        int evtID = passenger->getEvtID();
-//        Elevator* elevator = Elevators[evtID-1];    // 获取到该电梯
-//        if ()
+
     }
     // 展示模拟信息面板
     showData();
@@ -83,14 +79,23 @@ bool Building::allocateEvtForPsg(Passenger *passenger) {
     * 2. 电梯的当前位置高于本楼层，电梯的目的地低于本楼层
     * 3. 电梯为停止状态
     */
+    // 如果存在合适的电梯，则将该电梯的ID传给乘客
+    vector<Elevator*> qualified;
     for (Elevator *elevator: Elevators) {
-        // 如果存在合适的电梯，则将该电梯的ID传给乘客
         if (isSatisfied(elevator, passenger)) {
-            passenger->setElevator(elevator->getID());
-            int floorNumber = passenger->getcurrFloor();
-            elevator->setRequest(floorNumber);   // 向指定的电梯发出请求
-            return true;
+            qualified.push_back(elevator);
         }
+    }
+    if (qualified.size() != 0) {
+        std::sort(qualified.begin(), qualified.end(),
+                  [passenger](Elevator *ele1, Elevator *ele2) {
+                      return ele1->distance(passenger) < ele2->distance(passenger);
+                  });
+        Elevator* elevator = qualified[0];
+        passenger->setElevator(elevator->getID());
+        int floorNumber = passenger->getcurrFloor();
+        elevator->setRequest(floorNumber);   // 向指定的电梯发出请求
+        return true;
     }
     return false;
 }
@@ -117,13 +122,13 @@ bool Building::isSatisfied(Elevator *elevator, Passenger *passenger) {
 }
 
 int Building::getPsgNums() {
-    return Passengers.size();
+    return std::count_if(Passengers.begin(), Passengers.end(), [](Passenger* p){return p->getState() != AfterSimulation;});
 }
 
 
 void Building::showData() {
     cout << "/*************************ElevatorSimulation*************************/" << endl;
-    cout << "passenger numbers in simulation: " << Passengers.size() << endl;
+    cout << "passenger numbers in simulation: " << this->getPsgNums() << endl;
     cout << "Elevator ID\t" << "Elevator state" << "\t" << "passengers" << "\t" << "current floor number"
          << endl;
     for (auto elevator: Elevators) {
@@ -160,4 +165,27 @@ void Building::printPassengers(Elevator* elevator) {
     for (auto passenger : elevator->getPassengers()) {
         cout << passenger->getID() << ' ';
     }
+}
+
+vector<Passenger*> Building::getPsgs() const {
+    return this->Passengers;
+}
+
+void Building::showStatistics() const {
+    cout << "/*************************Elevators Statistics*************************/" << endl;
+    cout << "\t" <<"Running Time" << "\t\t" << "Stopping Time" "\t\t\n";
+    for (auto elevator : this->Elevators) {
+        cout << "Elevator" << elevator->getID();
+        cout << "\t" << elevator->getRunningTime() << "\t\t" << elevator->getStoppingTime() << "\t\t" << endl;
+    }
+    cout << "/*************************Elevators Statistics*************************/" << endl;
+    cout << endl << endl;
+    cout << "/*************************Passengers Statistics*************************/" << endl;
+    cout << "\t" << "Waiting Time" << "\t\t" << endl;
+    for (auto passenger : this->Passengers) {
+        cout << "Passenger" << passenger->getID();
+        cout << "\t\t" << passenger->getWaitingTime() << "\t\t" <<  endl;
+    }
+    cout << "/*************************Passengers Statistics*************************/" << endl;
+
 }

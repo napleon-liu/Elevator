@@ -65,7 +65,8 @@ bool Elevator::arrivedTable[10][40] = {
 };
 
 Elevator::Elevator(int _id) : id(_id), currFloor(1), direction(DirectionStay), state(Stop),
-                              passTime(0), destination(1){
+                              passTime(0), destination(1),
+                              runTime(0), stopTime(0){
     // 一楼对电梯有请求
     requests.push_back(1);
 }
@@ -119,9 +120,9 @@ void Elevator::e_Simulation() {
 
 // 电梯处于向上状态时的模拟
 void Elevator::goUpSimulation() {
-    if (currFloor >= floorNums) {
+    runTime++;
+    if (this->passengers.size() == 0 && this->requests.size() == 0) {
         state = Stop;
-        return ;
     }
     // 如果电梯在两层之间已经运行的时间小于需要的时间
     if (passTime < gapTime) {
@@ -138,13 +139,20 @@ void Elevator::goUpSimulation() {
     for (auto passenger: passengers) {
         passenger->setCurrFloor(currFloor);
     }
+    if (currFloor == 40 && state == GoUp) {
+        state = GoDown;
+    }
 }
 
 void Elevator::goDownSimulation() {
-    if (currFloor <= 0) {
+    runTime++;
+    if (this->passengers.size() == 0 && this->requests.size() == 0) {
         state = Stop;
-        return ;
     }
+//    if (currFloor <= 0) {
+//        state = Stop;
+//        return ;
+//    }
     // 如果电梯在两层之间已经运行的时间小于需要的时间
     if (passTime < gapTime) {
         passTime++; //继续运行
@@ -162,10 +170,14 @@ void Elevator::goDownSimulation() {
     for (auto passenger: passengers) {
         passenger->setCurrFloor(currFloor);
     }
+    if (currFloor == 1 && state == GoDown) {
+        state = GoUp;
+    }
 }
 
 // 电梯在某层停留时的模拟
 void Elevator::StaySimulation() {
+    runTime++;
 //    Floor floor = *floors[currFloor - 1];
     // 如果有乘客到达了目的地
     for (auto iterator = passengers.begin(); iterator != passengers.end(); iterator++) {
@@ -216,6 +228,7 @@ void Elevator::StaySimulation() {
 
 // 电梯停止运行时的模拟
 void Elevator::StopSimulation() {
+    stopTime++;
     passTime = 0;
     // 检查是否有请求，有请求则前往请求地点
     if (!requests.empty()) {
@@ -260,5 +273,17 @@ bool Elevator::isDestination() {
 
 vector<Passenger *> Elevator::getPassengers() {
     return passengers;
+}
+
+int Elevator::getRunningTime() const {
+    return runTime;
+}
+
+int Elevator::getStoppingTime() const {
+    return stopTime;
+}
+
+int Elevator::distance(Passenger *pPassenger) {
+    return abs(currFloor - pPassenger->getcurrFloor());
 }
 

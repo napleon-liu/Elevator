@@ -1,7 +1,7 @@
 #include "../include/Passenger.h"
 
 // 所有乘客初始时均在一层
-Passenger::Passenger(int _id) : currFloor(1), currSmuTimes(0), state(BeforeSimulation), id(_id) {
+Passenger::Passenger(int _id) : currFloor(1), currSmuTimes(0), state(BeforeSimulation), id(_id), waitTime(0) {
     maxSmuTimes = rand() % maxSimulationTimes + 1;  //  每位乘客的仿真次数在 1-10次之间
     // 为乘客随机分配电梯
     evtID = rand() % evtNums + 1;
@@ -63,7 +63,7 @@ void Passenger::staySimulation() {
 
 // 乘客等待电梯时的模拟
 void Passenger::waitSimulation() {
-    ;
+    waitTime++; //  乘客等待电梯时模拟时间自增
 }
 
 // 乘客跟随电梯运动时的模拟，实时更新乘客的楼层信息
@@ -117,4 +117,8 @@ int Passenger::getCurrSmuTimes() {
 
 int Passenger::getMaxSmuTimes() {
     return maxSmuTimes;
+}
+
+int Passenger::getWaitingTime() const {
+    return waitTime;
 }

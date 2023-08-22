@@ -2,8 +2,9 @@
 #include<windows.h>
 #include "../include/Timer.h"
 #include<memory>
-#include<ctime>
-void systemRun(Building* building);
+#include<algorithm>
+#include <ctime>
+void systemRun(Building *building);
 
 int main() {
     // 设置随机数
@@ -17,11 +18,14 @@ int main() {
 // 程序的主过程
 void systemRun(Building* building) {
     Timer* timer = Timer::getInstance();
-    while (building->getPsgNums()) {
+    vector<Passenger*> passengers = building->getPsgs();
+    while (std::any_of(passengers.begin(), passengers.end(), [](Passenger *p){ return p->getState() != AfterSimulation;})) {
         timer->showCurrTime();
         building->b_simulation();
         Sleep(500);
         system("cls");
         timer->increaseTime();
     }
+    building->showStatistics();
+    system("pause");
 }

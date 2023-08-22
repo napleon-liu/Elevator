@@ -7,6 +7,8 @@ using std::cin;
 using std::endl;
 class Passenger {
 private:
+    int waitTime;   // 乘客发起请求后等待电梯的时间
+
     int destination;    // 乘客的目的楼层
 
     int currFloor;     // 乘客的当前所在的楼层
@@ -59,6 +61,8 @@ public:
     int getCurrSmuTimes();
 
     int getMaxSmuTimes();
+
+    int getWaitingTime() const;
 };
 
 

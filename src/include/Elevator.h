@@ -5,6 +5,8 @@ using std::string;
 using std::vector;
 class Elevator {
 private:
+    int stopTime;   // 电梯在模拟过程中的总停留时间
+    int runTime;    // 电梯在模拟过程中的总运行时间
     static int gapTime;
     ElevatorState state;    // 电梯的状态
     Direction direction;    // 电梯的方向
@@ -49,5 +51,11 @@ public:
     bool isDestination();
 
     vector<Passenger *> getPassengers();
+
+    int getRunningTime() const;
+
+    int getStoppingTime() const;
+
+    int distance(Passenger *pPassenger);
 };
 
