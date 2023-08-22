@@ -1,3 +1,0 @@
-E:/CodeField/Elevator/cmake-build-debug/CMakeFiles/Elevator.dir
-E:/CodeField/Elevator/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/CodeField/Elevator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
