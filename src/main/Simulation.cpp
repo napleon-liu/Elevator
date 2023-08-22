@@ -1,8 +1,8 @@
 #include "../include/Building.h"
 #include<windows.h>
-#include<ctime>
 #include "../include/Timer.h"
 #include<memory>
+#include<ctime>
 void systemRun(Building* building);
 
 int main() {

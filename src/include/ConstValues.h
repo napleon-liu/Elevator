@@ -15,6 +15,8 @@ const int maxPsgNums = 100;
 const int maxSimulationTimes = 10;
 // 乘客在某层的最大停留时间
 const int maxStayingTime = 10;
+// 表示电梯在楼层间运行所需要的时间
+const int maxGapTime = 4;
 // 表示电梯运行方向的枚举类型
 typedef enum {
     DirectionUp = 0, // 0 表示向上

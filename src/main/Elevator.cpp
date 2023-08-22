@@ -1,8 +1,71 @@
 #include "../include/Elevator.h"
 
+int Elevator::gapTime = maxGapTime;
+
+bool Elevator::arrivedTable[10][40] = {
+        {
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,},
+        {
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            true,true,true,true,true,true,true,true,true,true,
+            },
+        {
+                true,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+            },
+        {
+                true,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+                false,false,false,false,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+            },
+        {
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+            },
+        {
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,true,true,true,true,true,
+                true,true,true,true,true,false,false,false,false,false,
+                false,false,false,false,false,false,false,false,false,false,
+            },
+        {
+                true,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+            },
+        {
+                true,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+            },
+        {
+                true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,false,
+            },
+        {
+                true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,
+                false,true,false,true,false,true,false,true,false,true,false,
+            },
+};
 
 Elevator::Elevator(int _id) : id(_id), currFloor(1), direction(DirectionStay), state(Stop),
-                              passTime(0), destination(1), gapTime(4) {
+                              passTime(0), destination(1){
     // 一楼对电梯有请求
     requests.push_back(1);
 }
@@ -10,11 +73,6 @@ Elevator::Elevator(int _id) : id(_id), currFloor(1), direction(DirectionStay), s
 Elevator::~Elevator() {
     cout << "电梯" << id << " 已经结束运行";
 }
-
-//void Elevator::setState(ElevatorState _state) {
-//    state = _state;
-//}
-
 
 int Elevator::getCurrFloor() const {
     return this->currFloor;
@@ -24,10 +82,6 @@ int Elevator::getCurrFloor() const {
 ElevatorState Elevator::getstate() {
     return this->state;
 }
-
-//int Elevator::getDirection() {
-//    return this->direction;
-//}
 
 int Elevator::getID() const {
     return this->id;
@@ -202,10 +256,6 @@ bool Elevator::isDestination() {
         }
     }
     return false;
-}
-
-int Elevator::getPsgNums() {
-    return passengers.size();
 }
 
 vector<Passenger *> Elevator::getPassengers() {

@@ -21,13 +21,13 @@ public:
 
     bool allocateEvtForPsg(Passenger *passenger);
 
-    bool isSatisfied(Elevator *elevator, Passenger *passenger);
+    static bool isSatisfied(Elevator *elevator, Passenger *passenger);
 
     int getPsgNums();
 
-    void printState(ElevatorState state);
+    static void printState(ElevatorState state);
 
-    void printPassengers(Elevator* elevator);
+    static void printPassengers(Elevator* elevator);
 };
 
 #endif
